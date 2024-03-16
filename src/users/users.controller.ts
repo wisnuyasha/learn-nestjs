@@ -38,9 +38,9 @@ export class UsersController {
   }
 
   // create user
-  @Post(':id')
+  @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return createUserDto;
+    return this.usersService.create(createUserDto);
   }
 
   // update user by id
@@ -49,12 +49,12 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ) {
-    return { id, updateUserDto };
+    return this.usersService.update(id, updateUserDto);
   }
 
   // delete user by id
   @Delete(':id')
   delete(@Param('id', ParseIntPipe) id: number) {
-    return { id };
+    return this.usersService.delete(id);
   }
 }
