@@ -4,47 +4,57 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
 } from '@nestjs/common';
+import { UsersService } from './users.service';
+import { CreateUserDto, roles } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
-  // get all users
+  constructor(private readonly usersService: UsersService) {}
+
+  // get all users w/ query
   @Get()
-  findAll(): [] {
-    return [];
+  findAll(@Query('role') role?: roles) {
+    return this.usersService.findAll(role);
   }
 
-  // get all users/admins w/ query
-  // ensure to add nested route above 'get by id'
+  // get all users/admins
+  // ensure to add nested route above 'get by id' / dynamic route (:id)
   @Get('admins')
-  findAllAdmins(@Query('role') role?: 'one' | 'two' | 'three') {
-    return [];
+  findAllAdmins() {
+    return this.usersService.findAllAdmins();
   }
 
   // get by users by id
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return { id };
+  // ParseIntPipe transforms/parse any string to int value
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.findOne(id);
   }
 
   // create user
-  @Post()
-  create(@Body() user: {}) {
-    return user;
+  @Post(':id')
+  create(@Body() createUserDto: CreateUserDto) {
+    return createUserDto;
   }
 
   // update user by id
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatedUser: {}) {
-    return { id, updatedUser };
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return { id, updateUserDto };
   }
 
   // delete user by id
   @Delete(':id')
-  delete(@Param('id') id: string) {
+  delete(@Param('id', ParseIntPipe) id: number) {
     return { id };
   }
 }
