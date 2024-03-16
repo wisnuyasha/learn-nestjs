@@ -16,7 +16,8 @@ export class UsersService {
     const userByRole = role
       ? this.users.filter((user) => user.role === role)
       : this.users;
-    if (role && !userByRole) throw new NotFoundException('User Role Not Found');
+    if (role && userByRole.length === 0)
+      throw new NotFoundException('User Role Not Found');
     return userByRole;
   }
 
