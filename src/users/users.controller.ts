@@ -18,13 +18,14 @@ export class UsersController {
   }
 
   // get all users/admins w/ query
+  // ensure to add nested route above 'get by id'
   @Get('admins')
   findAllAdmins(@Query('role') role?: 'one' | 'two' | 'three') {
     return [];
   }
 
   // get by users by id
-  @Get()
+  @Get(':id')
   findOne(@Param('id') id: string) {
     return { id };
   }
@@ -36,13 +37,13 @@ export class UsersController {
   }
 
   // update user by id
-  @Patch()
+  @Patch(':id')
   update(@Param('id') id: string, @Body() updatedUser: {}) {
     return { id, updatedUser };
   }
 
   // delete user by id
-  @Delete()
+  @Delete(':id')
   delete(@Param('id') id: string) {
     return { id };
   }
